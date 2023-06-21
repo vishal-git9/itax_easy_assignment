@@ -15,13 +15,17 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import CountUp from 'react-countup';
 export const HouseAllowance = ({ settabs }) => {
   const [isError, setisError] = useState({
     error: false,
     name: "",
   });
+  const [Exempthra,setExempthra] = useState(1000)
+  const [Taxedhra,setTaxedhra] = useState(1000)
+
   const [value, setValues] = useState({
     salary: 1000,
     DA: 0,
@@ -61,7 +65,31 @@ export const HouseAllowance = ({ settabs }) => {
       });
     }
   };
-  console.log(value)
+  const handleCalculateHra = ()=>{
+    let min = Infinity
+    const basic = (Number(value.Rent))-((Number(value.salary)+Number(value.DA))*10)/100
+    const hra = Number(value.HRA)
+    const resident = value.Metro==="true" ? ((Number(value.salary)+Number(value.DA))*50)/100 : ((Number(value.salary)+Number(value.DA))*40)/100
+    // console.log(basic,hra,resident)
+    if(basic>0){
+      min = Math.min(min,basic)
+    }
+    if(hra>0){
+      min = Math.min(min,hra)
+    }
+    if(resident>0){
+      min = Math.min(min,resident)
+    }
+    // console.log(min)
+      setExempthra(min)
+      setTaxedhra(hra-basic)
+  }
+  useEffect(()=>{
+    if(isError.error===false){
+      handleCalculateHra()
+    }
+  },[value,Exempthra,isError.error])
+  // console.log(value)
   return (
     <>
       <BiArrowBack
@@ -205,11 +233,13 @@ export const HouseAllowance = ({ settabs }) => {
         <HStack width={"100%"} bgColor={"#2D3748"} justifyContent={"space-around"} p={10}>
             <VStack>
                 <Heading fontSize={"xl"} color={"whiteAlpha.600"}>Exempted HRA</Heading>
-                <Text fontSize={"3xl"}>₹0.00</Text>
+                <CountUp start={0} end={Exempthra} prefix="₹" style={{fontSize:"25px"}}>
+                </CountUp>
             </VStack>
             <VStack>
             <Heading fontSize={"xl"} color={"whiteAlpha.600"}>Taxable HRA</Heading>
-                <Text fontSize={"3xl"}>₹0.00</Text>
+            <CountUp start={0} end={Taxedhra} prefix="₹" style={{fontSize:"25px"}}>
+                </CountUp>
             </VStack>
         </HStack>
       </Box>
