@@ -1,8 +1,9 @@
-import { Card, CardBody, Text } from '@chakra-ui/react'
+import { Card, CardBody, Text, useColorModeValue } from '@chakra-ui/react'
 import { BsHouseCheck } from 'react-icons/bs'
 import { GiReceiveMoney } from 'react-icons/gi'
 
 export const Tabs = ({setTab}) => {
+  const bgColor = useColorModeValue("white","#2D3748")
   return (
     <>
         <Card
@@ -12,7 +13,7 @@ export const Tabs = ({setTab}) => {
           cursor={"pointer"}
           transition={"transform 0.5s ease-in-out"}
           _hover={{
-            bgColor: "#2D3748",
+            bgColor: bgColor,
             transform:"scale(1.1)"
           }}
 
@@ -37,7 +38,7 @@ export const Tabs = ({setTab}) => {
           transition={"transform 0.5s ease-in-out"}
           cursor={"pointer"}
           _hover={{
-            bgColor: "#2D3748",
+            bgColor:bgColor,
             transform:"scale(1.1)"
           }}
           onClick={()=>setTab("/tax")}

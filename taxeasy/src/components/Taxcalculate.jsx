@@ -169,7 +169,6 @@ export const Taxcalculate = ({ settabs }) => {
       }
       // Apply tax slabs for below 60 years in old regime
       // Adjust the tax slabs and rates accordingly
-      console.log(ageCategory)
     } else if (ageCategory === "60to80") {
       if (taxableIncome <= 300000) {
         taxLiability = 0;
@@ -180,7 +179,6 @@ export const Taxcalculate = ({ settabs }) => {
         taxLiability = 300000 * 0.05 + (taxableIncome - 500000) * 0.2;
         taxLiability += taxLiability * 0.04;
       } else {
-        console.log("hi")
         taxLiability =
           300000 * 0.05 + 500000 * 0.2 + (taxableIncome - 1000000) * 0.3;
         taxLiability += taxLiability * 0.04;
@@ -220,8 +218,8 @@ export const Taxcalculate = ({ settabs }) => {
     calculateNewRegimeTax(taxableIncome);
     calculateOldRegimeTax(taxableIncome);
   };
-  console.log(newTaxLiablity);
-  console.log(oldTaxLiablity);
+  // console.log(newTaxLiablity);
+  // console.log(oldTaxLiablity);
   return (
     <Box
       display={"flex"}
@@ -402,7 +400,7 @@ export const Taxcalculate = ({ settabs }) => {
             start={0}
             end={newTaxLiablity}
             prefix="₹"
-            style={{ fontSize: "25px" }}
+            style={{ fontSize: "25px",color:"white" }}
           ></CountUp>
         </VStack>
         <VStack>
@@ -413,7 +411,7 @@ export const Taxcalculate = ({ settabs }) => {
             start={0}
             end={oldTaxLiablity}
             prefix="₹"
-            style={{ fontSize: "25px" }}
+            style={{ fontSize: "25px",color:"white" }}
           ></CountUp>
         </VStack>
       </HStack>

@@ -233,12 +233,12 @@ export const HouseAllowance = ({ settabs }) => {
         <HStack width={"100%"} bgColor={"#2D3748"} justifyContent={"space-around"} p={10}>
             <VStack>
                 <Heading fontSize={"xl"} color={"whiteAlpha.600"}>Exempted HRA</Heading>
-                <CountUp start={0} end={Exempthra} prefix="₹" style={{fontSize:"25px"}}>
+                <CountUp start={0} end={Exempthra} prefix="₹" style={{fontSize:"25px",color:"white"}}>
                 </CountUp>
             </VStack>
             <VStack>
             <Heading fontSize={"xl"} color={"whiteAlpha.600"}>Taxable HRA</Heading>
-            <CountUp start={0} end={Taxedhra} prefix="₹" style={{fontSize:"25px"}}>
+            <CountUp start={0} end={Taxedhra} prefix="₹" style={{fontSize:"25px",color:"white"}}>
                 </CountUp>
             </VStack>
         </HStack>
