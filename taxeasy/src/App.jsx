@@ -1,4 +1,4 @@
-import {Box, Container } from "@chakra-ui/react";
+import {Box } from "@chakra-ui/react";
 import "./App.css";
 import { useState } from "react";
 import { HouseAllowance } from "./components/HouseAllowance";

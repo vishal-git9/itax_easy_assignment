@@ -6,8 +6,12 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Flex,
+  FormLabel,
   HStack,
   Heading,
+  Radio,
+  RadioGroup,
   Select,
   VStack,
 } from "@chakra-ui/react";
@@ -32,6 +36,14 @@ export const Taxcalculate = ({ settabs }) => {
   const [interest80E, setInterest80E] = useState(0);
   const [newTaxLiablity, setnewTaxLiablity] = useState(0);
   const [oldTaxLiablity, setoldTaxLiablity] = useState(0);
+
+  // for HRA exemption
+
+  const [da, setDA] = useState(0);
+  const [hra, setHRA] = useState(0);
+  const [basicSalary, setbasicSalary] = useState(0);
+  const [rent, setRent] = useState(0);
+  const [metro, setMetro] = useState("false");
 
   const calculateNewRegimeTax = (salary) => {
     // New Regime tax calculation logic based on age category
@@ -202,10 +214,31 @@ export const Taxcalculate = ({ settabs }) => {
   };
 
   const calculateTax = () => {
+    let min = Infinity;
+    const basic =
+      Number(rent) - ((Number(basicSalary) + Number(da)) * 10) / 100;
+    const resident =
+      metro === "true"
+        ? ((Number(basicSalary) + Number(da)) * 50) / 100
+        : ((Number(basicSalary) + Number(da)) * 40) / 100;
+    // console.log(basic,hra,resident)
+    if (basic > 0) {
+      min = Math.min(min, basic);
+    }
+    if (hra > 0) {
+      min = Math.min(min, hra);
+    }
+    if (resident > 0) {
+      min = Math.min(min, resident);
+    }
+    // console.log(min)
+    const Taxedhra = hra - min;
     const grossTotalIncome =
-      salary + rentalIncome + otherIncome + annualInterestIncome;
-    const totalIncome = grossTotalIncome - 50000;
-    selfOccupiedInterest -
+      salary + rentalIncome + otherIncome + annualInterestIncome + (Taxedhra>0 && Taxedhra);
+    const totalIncome =
+      grossTotalIncome -
+      50000 -
+      selfOccupiedInterest -
       letOutInterest -
       deduction80C -
       npsContribution -
@@ -214,7 +247,6 @@ export const Taxcalculate = ({ settabs }) => {
       interest80E -
       interestSavingsAccount;
     const taxableIncome = totalIncome;
-    console.log(taxableIncome);
     calculateNewRegimeTax(taxableIncome);
     calculateOldRegimeTax(taxableIncome);
   };
@@ -373,14 +405,45 @@ export const Taxcalculate = ({ settabs }) => {
           <AccordionPanel pb={4} display={"flex"} flexDir={"column"} gap={5}>
             <FormInput
               fontSize={"sm"}
+              value={basicSalary}
+              handleInputChange={setbasicSalary}
               label={"Basic salary received per annum"}
             />
             <FormInput
               fontSize={"sm"}
+              value={da}
+              handleInputChange={setDA}
               label={"Dearness allowance (DA) received per annum"}
             />
-            <FormInput fontSize={"sm"} label={"HRA received per annum"} />
-            <FormInput fontSize={"sm"} label={"Total rent paid per annum"} />
+            <FormInput
+              fontSize={"sm"}
+              handleInputChange={setHRA}
+              value={hra}
+              label={"HRA received per annum"}
+            />
+            <FormInput
+              fontSize={"sm"}
+              handleInputChange={setRent}
+              value={rent}
+              label={"Total rent paid per annum"}
+            />
+            <Flex justifyContent={"space-between"} alignItems={"center"}>
+              <FormLabel fontSize={"large"}>
+                Are you living in metro city ?
+              </FormLabel>
+              <Box width={"40%"}>
+                <RadioGroup defaultValue="false" onChange={(e) => setMetro(e)}>
+                  <HStack
+                    spacing="24px"
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <Radio value="true">YES</Radio>
+                    <Radio value="false">NO</Radio>
+                  </HStack>
+                </RadioGroup>
+              </Box>
+            </Flex>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
@@ -400,7 +463,7 @@ export const Taxcalculate = ({ settabs }) => {
             start={0}
             end={newTaxLiablity}
             prefix="₹"
-            style={{ fontSize: "25px",color:"white" }}
+            style={{ fontSize: "25px", color: "white" }}
           ></CountUp>
         </VStack>
         <VStack>
@@ -411,7 +474,7 @@ export const Taxcalculate = ({ settabs }) => {
             start={0}
             end={oldTaxLiablity}
             prefix="₹"
-            style={{ fontSize: "25px",color:"white" }}
+            style={{ fontSize: "25px", color: "white" }}
           ></CountUp>
         </VStack>
       </HStack>

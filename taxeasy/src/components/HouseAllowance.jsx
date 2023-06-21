@@ -6,7 +6,6 @@ import {
   Input,
   Radio,
   RadioGroup,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import {
@@ -82,7 +81,7 @@ export const HouseAllowance = ({ settabs }) => {
     }
     // console.log(min)
       setExempthra(min)
-      setTaxedhra(hra-basic)
+      setTaxedhra(hra-min)
   }
   useEffect(()=>{
     if(isError.error===false){
